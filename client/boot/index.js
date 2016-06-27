@@ -281,6 +281,11 @@ function reduxStoreReady( reduxStore ) {
 		}
 
 		// If `?tour` is present, show the guided tour
+		//
+		// TODO(mcsf): Though the rest of the Guided Tours selector-based code
+		// works without this, analytics are triggered during the dispatch of
+		// this action. Thus, keep dispatching this until a solution is
+		// implemented.
 		if ( config.isEnabled( 'guided-tours' ) && context.query.tour ) {
 			context.store.dispatch( showGuidedTour( {
 				shouldShow: true,
