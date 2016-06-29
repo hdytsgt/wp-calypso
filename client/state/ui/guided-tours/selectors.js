@@ -59,7 +59,7 @@ const getToursSeen = createSelector(
 	getToursHistory
 );
 
-const findEligibleTour = createSelector(
+export const findEligibleTour = createSelector(
 	state => {
 		const toursFromTriggers = uniq( [
 			...getToursFromFeaturesReached( state ),

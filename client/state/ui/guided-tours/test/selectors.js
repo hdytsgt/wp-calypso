@@ -8,6 +8,7 @@ import { expect } from 'chai';
  */
 import {
 	getGuidedTourState,
+	findEligibleTour,
 } from '../selectors';
 import guidedToursConfig from 'layout/guided-tours/config';
 
@@ -54,6 +55,69 @@ describe( 'selectors', () => {
 			expect( tourState ).to.deep.equal( Object.assign( {}, tourState, {
 				stepConfig
 			} ) );
+		} );
+	} );
+	describe( '#findEligibleTour()', () => {
+		const makeState = ( {
+			actionLog = [],
+			toursHistory = [],
+			queryArguments = {},
+		} ) => ( {
+			ui: {
+				actionLog,
+				queryArguments,
+			},
+			preferences: {
+				values: {
+					'guided-tours-history': toursHistory,
+				},
+			},
+		} );
+
+		const navigateToThemes = {
+			type: 'ROUTE_SET',
+			path: '/design/77203074',
+		};
+
+		const themesTourSeen = {
+			tourName: 'themes',
+			timestamp: 1337,
+			finished: true,
+		};
+
+		it( 'should return undefined if nothing relevant in log', () => {
+			const state = makeState( { actionLog: [ { type: 'IRRELEVANT' } ] } );
+			const tour = findEligibleTour( state );
+
+			expect( tour ).to.equal( undefined );
+		} );
+		it( 'should find `themes` when applicable', () => {
+			const state = makeState( { actionLog: [ navigateToThemes ] } );
+			const tour = findEligibleTour( state );
+
+			expect( tour ).to.equal( 'themes' );
+		} );
+		it( 'should not find `themes` if previously seen', () => {
+			const state = makeState( {
+				actionLog: [ navigateToThemes ],
+				toursHistory: [ themesTourSeen ],
+			} );
+
+			const tour = findEligibleTour( state );
+
+			expect( tour ).to.equal( undefined );
+		} );
+		it( 'should favor a tour launched via query arguments', () => {
+			const state = makeState( {
+				actionLog: [ navigateToThemes ],
+				toursHistory: [ themesTourSeen ],
+				queryArguments: { tour: 'main' }
+			} );
+			const tour = findEligibleTour( state );
+
+			expect( tour ).to.equal( 'main' );
+		} );
+		xit( 'should pick a tour based on the most recent actions', () => {
 		} );
 	} );
 } );
