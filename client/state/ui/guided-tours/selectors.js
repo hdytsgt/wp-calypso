@@ -31,13 +31,18 @@ const relevantFeatures = [
 		tour: 'themes',
 		context: () => true,
 	},
+	{
+		path: '/test',
+		tour: 'test',
+		context: () => true,
+	},
 ];
 
 const getToursFromFeaturesReached = createSelector(
 	state => (
 		uniq( getActionLog( state )
 			.filter( ( { type } ) => type === ROUTE_SET )
-			.reduce( ( allTours, { path: triggerPath } ) => {
+			.reduceRight( ( allTours, { path: triggerPath } ) => {
 				const newTours = relevantFeatures
 					.filter( ( { path: featurePath } ) =>
 						startsWith( triggerPath, featurePath ) )
