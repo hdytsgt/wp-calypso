@@ -12,6 +12,7 @@ import {
 	PREVIEW_IS_SHOWING,
 	PREVIEW_URL_CLEAR,
 	PREVIEW_URL_SET,
+	ROUTE_SET,
 	SERIALIZE,
 	DESERIALIZE,
 } from 'state/action-types';
@@ -98,12 +99,17 @@ export function currentPreviewUrl( state = null, action ) {
 	return state;
 }
 
+export const queryArguments = createReducer( {}, {
+	[ ROUTE_SET ]: ( state, { query } ) => query,
+} );
+
 const reducer = combineReducers( {
 	section,
 	isLoading,
 	hasSidebar,
 	isPreviewShowing,
 	currentPreviewUrl,
+	queryArguments,
 	selectedSiteId,
 	recentlySelectedSiteIds,
 	guidedTour,

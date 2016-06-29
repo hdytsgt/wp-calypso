@@ -90,3 +90,7 @@ export function isPreviewShowing( state ) {
 export function getPreviewUrl( state ) {
 	return state.ui.currentPreviewUrl;
 }
+
+export function getQueryArguments( state ) {
+	return state.ui.queryArguments;
+}
