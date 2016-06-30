@@ -25,6 +25,25 @@ describe( 'reducer', () => {
 		const actions = [
 			{
 				type: ROUTE_SET,
+				path: '/design/77203074',
+			},
+			{
+				type: ROUTE_SET,
+				path: '/design/foobar',
+			},
+		];
+		const state = actions.reduce( reducer, undefined );
+
+		expect( state ).to.eql( [
+			{ ...actions[ 0 ], timestamp: 1337 },
+			{ ...actions[ 1 ], timestamp: 1337 },
+		] );
+	} );
+
+	it( 'should discard them if payload is irrelevant', () => {
+		const actions = [
+			{
+				type: ROUTE_SET,
 				path: '/menus/77203074',
 			},
 			{
@@ -34,9 +53,6 @@ describe( 'reducer', () => {
 		];
 		const state = actions.reduce( reducer, undefined );
 
-		expect( state ).to.eql( [
-			{ ...actions[ 0 ], timestamp: 1337 },
-			{ ...actions[ 1 ], timestamp: 1337 },
-		] );
+		expect( state ).to.eql( [] );
 	} );
 } );
