@@ -7,7 +7,7 @@ import { get, difference, find, memoize, noop, startsWith, uniq } from 'lodash';
  * Internal dependencies
  */
 import { ROUTE_SET } from 'state/action-types';
-import { isSectionLoading, getQueryArguments } from 'state/ui/selectors';
+import { isSectionLoading, getInitialQueryArguments } from 'state/ui/selectors';
 import { getActionLog } from 'state/ui/action-log/selectors';
 import { getPreference } from 'state/preferences/selectors';
 import createSelector from 'lib/create-selector';

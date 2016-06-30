@@ -12,16 +12,16 @@ import {
 	PREVIEW_IS_SHOWING,
 	PREVIEW_URL_CLEAR,
 	PREVIEW_URL_SET,
-	ROUTE_SET,
 	SERIALIZE,
 	DESERIALIZE,
 } from 'state/action-types';
 import { createReducer } from 'state/utils';
+import actionLog from './action-log/reducer';
 import editor from './editor/reducer';
 import guidedTour from './guided-tours/reducer';
+import queryArguments from './query-arguments/reducer';
 import reader from './reader/reducer';
 import olark from './olark/reducer';
-import actionLog from './action-log/reducer';
 
 /**
  * Tracks the currently selected site ID.
@@ -98,10 +98,6 @@ export function currentPreviewUrl( state = null, action ) {
 	}
 	return state;
 }
-
-export const queryArguments = createReducer( {}, {
-	[ ROUTE_SET ]: ( state, { query } ) => query,
-} );
 
 const reducer = combineReducers( {
 	section,
