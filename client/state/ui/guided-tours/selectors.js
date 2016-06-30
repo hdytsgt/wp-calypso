@@ -6,7 +6,7 @@ import { get, difference, find, memoize, noop, startsWith, uniq } from 'lodash';
 /**
  * Internal dependencies
  */
-import { ROUTE_SET } from 'state/action-types';
+import { GUIDED_TOUR_UPDATE, ROUTE_SET } from 'state/action-types';
 import { isSectionLoading, getInitialQueryArguments } from 'state/ui/selectors';
 import { getActionLog } from 'state/ui/action-log/selectors';
 import { getPreference } from 'state/preferences/selectors';
@@ -23,8 +23,7 @@ const relevantFeatures = [
 	{
 		path: '/',
 		tour: 'main',
-		// TODO(mcsf): allow all tours to use qargs
-		context: state => getQueryArguments( state ).tour === 'main',
+		context: () => false,
 	},
 	{
 		path: '/design',
@@ -64,8 +63,35 @@ const getToursSeen = createSelector(
 	getToursHistory
 );
 
+const getTourFromQuery = createSelector(
+	state => {
+		const { tour } = getInitialQueryArguments( state );
+		if ( tour && find( relevantFeatures, { tour } ) ) {
+			return tour;
+		}
+	},
+	getInitialQueryArguments
+);
+
+/**
+ * Returns true if `tour` has been seen in the current Calypso session.
+ */
+const hasJustSeenTour = createSelector(
+	( state, tour ) => find( getActionLog( state ), {
+		type: GUIDED_TOUR_UPDATE,
+		shouldShow: false,
+		tour,
+	} ),
+	getActionLog
+);
+
 export const findEligibleTour = createSelector(
 	state => {
+		const requestedTour = getTourFromQuery( state );
+		if ( requestedTour && ! hasJustSeenTour( state, requestedTour ) ) {
+			return requestedTour;
+		}
+
 		const toursFromTriggers = uniq( [
 			...getToursFromFeaturesReached( state ),
 			// Right now, only one source from which to derive tours, but we may
