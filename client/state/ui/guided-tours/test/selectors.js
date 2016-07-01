@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { expect } from 'chai';
+import { constant, times } from 'lodash';
 
 /**
  * Internal dependencies
@@ -89,8 +90,20 @@ describe( 'selectors', () => {
 			path: '/test',
 		};
 
+		const mainTourSeen = {
+			tourName: 'main',
+			timestamp: 1337,
+			finished: true,
+		};
+
 		const themesTourSeen = {
 			tourName: 'themes',
+			timestamp: 1337,
+			finished: true,
+		};
+
+		const testTourSeen = {
+			tourName: 'test',
 			timestamp: 1337,
 			finished: true,
 		};
@@ -120,12 +133,42 @@ describe( 'selectors', () => {
 		it( 'should favor a tour launched via query arguments', () => {
 			const state = makeState( {
 				actionLog: [ navigateToThemes ],
-				toursHistory: [ themesTourSeen ],
+				toursHistory: [ mainTourSeen, themesTourSeen ],
 				queryArguments: { tour: 'main' }
 			} );
 			const tour = findEligibleTour( state );
 
 			expect( tour ).to.equal( 'main' );
+		} );
+		it( 'should dismiss a requested tour at the end', () => {
+			const mainTourJustSeen = {
+				tourName: 'main',
+				timestamp: 1338,
+				finished: true,
+			};
+			const state = makeState( {
+				actionLog: [ navigateToThemes ],
+				toursHistory: [ themesTourSeen, mainTourJustSeen ],
+				queryArguments: { tour: 'main', timestamp: 0 }
+			} );
+			const tour = findEligibleTour( state );
+
+			expect( tour ).to.equal( undefined );
+		} );
+		it( 'shouldn\'t show a requested tour twice', () => {
+			/*
+			 * Assume that a lot has happened during a Calypso session, so the
+			 * action log doesn't contain actions specific to Guided Tours
+			 * anymore.
+			 */
+			const state = makeState( {
+				actionLog: times( 50, constant( navigateToTest ) ),
+				toursHistory: [ testTourSeen, themesTourSeen ],
+				queryArguments: { tour: 'themes', timestamp: 0 }
+			} );
+			const tour = findEligibleTour( state );
+
+			expect( tour ).to.equal( undefined );
 		} );
 		describe( 'picking a tour based on the most recent actions', () => {
 			it( 'should pick `themes`', () => {

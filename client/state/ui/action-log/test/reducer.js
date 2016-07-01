@@ -9,6 +9,7 @@ import { expect } from 'chai';
 import { useFakeTimers } from 'test/helpers/use-sinon';
 import {
 	ROUTE_SET,
+	COMMENTS_LIKE,
 } from 'state/action-types';
 import reducer from '../reducer';
 
@@ -43,11 +44,11 @@ describe( 'reducer', () => {
 	it( 'should discard them if payload is irrelevant', () => {
 		const actions = [
 			{
-				type: ROUTE_SET,
+				type: COMMENTS_LIKE,
 				path: '/menus/77203074',
 			},
 			{
-				type: ROUTE_SET,
+				type: COMMENTS_LIKE,
 				path: '/menus/foobar',
 			},
 		];
