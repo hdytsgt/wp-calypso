@@ -631,6 +631,7 @@ const ManagePurchase = React.createClass( {
 
 				<RemovePurchase
 					hasLoadedSites={ this.props.hasLoadedSites }
+					hasLoadedUserPurchasesFromServer={ this.props.hasLoadedUserPurchasesFromServer }
 					selectedSite={ this.props.selectedSite }
 					selectedPurchase={ this.props.selectedPurchase }
 					user={ this.props.user } />
