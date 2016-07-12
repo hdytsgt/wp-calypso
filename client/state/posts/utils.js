@@ -3,17 +3,47 @@
  */
 import omit from 'lodash/omit';
 import omitBy from 'lodash/omitBy';
+import flow from 'lodash/flow';
+import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * Internal dependencies
  */
 import { DEFAULT_POST_QUERY } from './constants';
+import firstPassCanonicalImage from 'lib/post-normalizer/rule-first-pass-canonical-image';
+import decodeEntities from 'lib/post-normalizer/rule-decode-entities';
+import stripHtml from 'lib/post-normalizer/rule-strip-html';
 
 /**
  * Constants
  */
 
 const REGEXP_SERIALIZED_QUERY = /^((\d+):)?(.*)$/;
+
+/**
+ * Utility
+ */
+
+const normalizeFlow = flow( [
+	firstPassCanonicalImage,
+	decodeEntities,
+	stripHtml
+] );
+
+/**
+ * Returns a normalized post object given its raw form. A normalized post
+ * includes common transformations to prepare the post for display.
+ *
+ * @param  {Object} post Raw post object
+ * @return {Object}      Normalized post object
+ */
+export function normalizePost( post ) {
+	if ( ! post ) {
+		return null;
+	}
+
+	return normalizeFlow( cloneDeep( post ) );
+}
 
 /**
  * Returns a normalized posts query, excluding any values which match the

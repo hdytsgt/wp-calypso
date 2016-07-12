@@ -7,6 +7,7 @@ import { expect } from 'chai';
  * Internal dependencies
  */
 import {
+	normalizePost,
 	getNormalizedPostsQuery,
 	getSerializedPostsQuery,
 	getDeserializedPostsQueryDetails,
@@ -14,6 +15,39 @@ import {
 } from '../utils';
 
 describe( 'utils', () => {
+	describe( 'normalizePost()', () => {
+		it( 'should return null if post is falsey', () => {
+			const normalizedPost = normalizePost();
+			expect( normalizedPost ).to.be.null;
+		} );
+
+		it( 'should return a normalized post object', () => {
+			const POST = {
+				ID: 841,
+				site_ID: 2916284,
+				global_ID: '3d097cb7c5473c169bba0eb8e3c6cb64',
+				title: 'Ribs &amp; Chicken',
+				author: {
+					name: 'Badman <img onerror= />'
+				},
+				featured_image: 'https://example.com/logo.png'
+			};
+
+			const normalizedPost = normalizePost( POST );
+			expect( normalizedPost ).to.eql( {
+				...POST,
+				title: 'Ribs & Chicken',
+				author: {
+					name: 'Badman '
+				},
+				canonical_image: {
+					type: 'image',
+					uri: 'https://example.com/logo.png'
+				}
+			} );
+		} );
+	} );
+
 	describe( '#getNormalizedPostsQuery()', () => {
 		it( 'should exclude default values', () => {
 			const query = getNormalizedPostsQuery( {

@@ -6,6 +6,7 @@ import { expect } from 'chai';
 /**
  * Internal dependencies
  */
+import PostQueryManager from 'lib/query-manager/post';
 import {
 	getEditorLastDraftPost,
 	getEditorLastDraftSiteId,
@@ -18,6 +19,7 @@ describe( 'selectors', () => {
 			const post = getEditorLastDraftPost( {
 				posts: {
 					items: {},
+					queries: {},
 					edits: {}
 				},
 				ui: {
@@ -37,7 +39,14 @@ describe( 'selectors', () => {
 			const post = getEditorLastDraftPost( {
 				posts: {
 					items: {
-						'3d097cb7c5473c169bba0eb8e3c6cb64': { ID: 841, site_ID: 2916284, global_ID: '3d097cb7c5473c169bba0eb8e3c6cb64', title: 'Hello World' }
+						'3d097cb7c5473c169bba0eb8e3c6cb64': [ 2916284, 841 ]
+					},
+					queries: {
+						2916284: new PostQueryManager( {
+							items: {
+								841: { ID: 841, site_ID: 2916284, global_ID: '3d097cb7c5473c169bba0eb8e3c6cb64', title: 'Hello World' }
+							}
+						} )
 					},
 					edits: {
 						2916284: {
