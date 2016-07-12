@@ -41,7 +41,6 @@ export default React.createClass( {
 
 		if ( isEmpty( countriesList ) ) {
 			options.push( { key: 'loading', label: this.translate( 'Loading…' ), disabled: 'disabled' } );
-			value = '';
 		} else {
 			options = options.concat( [
 				{ key: 'select-country', label: this.translate( 'Select Country' ) },
@@ -56,6 +55,8 @@ export default React.createClass( {
 				return { key: country.code, label: country.name, value: country.code };
 			} ) );
 		}
+
+		value = value || '';
 
 		return (
 			<div className={ classes }>
