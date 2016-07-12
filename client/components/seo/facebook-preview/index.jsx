@@ -55,18 +55,20 @@ export const FacebookPreview = React.createClass( {
 
 		return (
 			<div className={ previewClasses }>
-				<div className="facebook-opengraph-preview__image">
-					<img src={ image || blavatarUrl( slug ) } />
-				</div>
-				<div className="facebook-opengraph-preview__body">
-					<div className="facebook-opengraph-preview__title">
-						{ facebookTitle( title || '' ) }
+				<div className="facebook-opengraph-preview__content">
+					<div className="facebook-opengraph-preview__image">
+						<img src={ image || blavatarUrl( slug ) } />
 					</div>
-					<div className="facebook-opengraph-preview__description">
-						{ facebookDesription( description || '' ) }
-					</div>
-					<div className="facebook-opengraph-preview__url">
-						{ baseDomain( url ) }
+					<div className="facebook-opengraph-preview__body">
+						<div className="facebook-opengraph-preview__title">
+							{ facebookTitle( title || '' ) }
+						</div>
+						<div className="facebook-opengraph-preview__description">
+							{ facebookDesription( description || '' ) }
+						</div>
+						<div className="facebook-opengraph-preview__url">
+							{ baseDomain( url ) }
+						</div>
 					</div>
 				</div>
 			</div>

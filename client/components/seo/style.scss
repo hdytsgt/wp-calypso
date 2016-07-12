@@ -65,14 +65,21 @@
 .facebook-opengraph-preview {
 	border: 1px solid;
 	border-color: #e9ebee #e9ebee #d1d1d1;
-	width: 527px;
+	display: flex;
+	overflow-x: auto;
+	max-width: 527px;
+	margin: 0 auto;
+	-webkit-overflow-scrolling: touch;
 }
 
-.facebook-opengraph-preview__image {
-
+.facebook-opengraph-preview__content {
+	display: flex;
+	flex-shrink: 0;
 }
 
 .facebook-opengraph-preview__body {
+	display: flex;
+	flex-direction: column;
 	margin: 10px 12px;
 }
 
@@ -83,9 +90,7 @@
 	font-weight: 500;
 	line-height: 22px;
 	max-height: 100px;
-	overflow: hidden;
 	transition: color 0.1s ease-in-out;
-	word-wrap: break-word;
 }
 
 .facebook-opengraph-preview__description {
@@ -94,8 +99,6 @@
 	font-size: 12px;
 	line-height: 16px;
 	max-height: 80px;
-	overflow: hidden;
-	word-wrap: break-word;
 }
 
 .facebook-opengraph-preview__url {
@@ -104,70 +107,65 @@
 	font-size: 11px;
 	line-height: 11px;
 	text-transform: uppercase;
-	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-.facebook-opengraph-preview__article
-.facebook-opengraph-preview__image img {
-	height: auto;
-	width: 100%;
-}
+.facebook-opengraph-preview__article {
+	.facebook-opengraph-preview__content {
+		flex-direction: column;
+		min-width: 100%;
+	}
 
-.facebook-opengraph-preview__article
-.facebook-opengraph-preview__body {
-	height: auto;
-	max-height: 100px;
-}
-
-.facebook-opengraph-preview__article
-.facebook-opengraph-preview__title {
-	margin-bottom: 12px;
-}
-
-.facebook-opengraph-preview__article
-.facebook-opengraph-preview__description {
-
-}
-
-.facebook-opengraph-preview__article
-.facebook-opengraph-preview__url {
-	margin-top: 12px;
-}
-
-.facebook-opengraph-preview__website
-.facebook-opengraph-preview__image {
-	float: left;
-	height: 100%;
-	width: 158px;
-
-	& img {
+	.facebook-opengraph-preview__image {
 		height: auto;
+		max-height: 250px;
 		width: 100%;
+		overflow: hidden;
+
+		& img {
+			height: auto;
+			width: 100%;
+		}
+	}
+
+	.facebook-opengraph-preview__body {
+		height: auto;
+		max-height: 100px;
+	}
+
+	.facebook-opengraph-preview__title {
+		margin-bottom: 5px;
+	}
+
+	.facebook-opengraph-preview__url {
+		margin-top: 9px;
 	}
 }
 
-.facebook-opengraph-preview__website
-.facebook-opengraph-preview__body {
-	height: 138px;
-	padding-left: 160px;
-	position: relative;
-}
+.facebook-opengraph-preview__website {
+	max-height: 158px;
 
-.facebook-opengraph-preview__website
-.facebook-opengraph-preview__title {
-	margin-bottom: 5px;
-	max-height: 110px;
-}
+	.facebook-opengraph-preview__image {
+		height: 100%;
+		width: 158px;
 
-.facebook-opengraph-preview__website
-.facebook-opengraph-preview__description {
+		& img {
+			height: auto;
+			width: 100%;
+		}
+	}
 
-}
+	.facebook-opengraph-preview__body {
+		height: 138px;
+	}
 
-.facebook-opengraph-preview__website
-.facebook-opengraph-preview__url {
-	position: absolute;
-	bottom: 0;
+	.facebook-opengraph-preview__title {
+		margin-bottom: 5px;
+		max-height: 110px;
+	}
+
+	.facebook-opengraph-preview__url {
+		margin-top: auto;
+	}
 }
