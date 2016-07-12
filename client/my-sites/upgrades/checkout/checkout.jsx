@@ -13,7 +13,7 @@ var connect = require( 'react-redux' ).connect,
  */
 var analytics = require( 'lib/analytics' ),
 	cartItems = require( 'lib/cart-values' ).cartItems,
-	clearPurchases = require( 'lib/upgrades/actions/purchases' ).clearPurchases,
+	clearPurchases = require( 'state/purchases/actions' ).clearPurchases,
 	DomainDetailsForm = require( './domain-details-form' ),
 	hasDomainDetails = require( 'lib/store-transactions' ).hasDomainDetails,
 	observe = require( 'lib/mixins/data-observe' ),
@@ -161,7 +161,7 @@ const Checkout = React.createClass( {
 		var renewalItem,
 			receiptId = ':receiptId';
 
-		clearPurchases();
+		this.props.clearPurchases();
 
 		if ( cartItems.hasRenewalItem( this.props.cart ) ) {
 			renewalItem = cartItems.getRenewalItems( this.props.cart )[ 0 ];
@@ -258,14 +258,9 @@ const Checkout = React.createClass( {
 
 module.exports = connect(
 	undefined,
-	function( dispatch ) {
-		return {
-			clearSitePlans: function( siteId ) {
-				dispatch( clearSitePlans( siteId ) );
-			},
-			fetchReceiptCompleted: function( receiptId, data ) {
-				dispatch( fetchReceiptCompleted( receiptId, data ) );
-			}
-		};
+	{
+		clearPurchases,
+		clearSitePlans,
+		fetchReceiptCompleted
 	}
 )( Checkout );
