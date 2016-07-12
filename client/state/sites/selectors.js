@@ -93,16 +93,16 @@ export function isJetpackSite( state, siteId ) {
  *
  * @param  {Object}   state  Global state tree
  * @param  {Number}   siteId Site ID
- * @param  {String}   module Module slug
+ * @param  {String}   slug Module slug
  * @return {?Boolean}        Whether site has Jetpack module active
  */
-export function isJetpackModuleActive( state, siteId, module ) {
+export function isJetpackModuleActive( state, siteId, slug ) {
 	const site = getSite( state, siteId );
 	if ( ! site || ! site.jetpack_modules ) {
 		return null;
 	}
 
-	return includes( site.jetpack_modules, module );
+	return includes( site.jetpack_modules, slug );
 }
 
 /**
