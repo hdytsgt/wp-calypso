@@ -26,7 +26,8 @@ import {
 import {
 	isPopular,
 	isMonthly,
-	PLAN_FREE
+	PLAN_FREE,
+	getPlanFeaturesObject
 } from 'lib/plans/constants';
 import { getSiteSlug } from 'state/sites/selectors';
 import {
@@ -276,7 +277,7 @@ export default connect( ( state, ownProps ) => {
 			currencyCode: getCurrentUserCurrencyCode( state ),
 			current: isCurrentSitePlan( state, selectedSiteId, planProductId ),
 			discountPrice: getPlanDiscountPrice( state, selectedSiteId, plan, showMonthly ),
-			features: planConstantObj.getFeatures(),
+			features: getPlanFeaturesObject( planConstantObj.getFeatures() ),
 			onUpgradeClick: onUpgradeClick
 				? () => {
 					const planSlug = getPlanSlug( state, planProductId );
