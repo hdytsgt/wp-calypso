@@ -1,18 +1,18 @@
 .post-relative-time-status {
-	.time,
-	.status {
+	.post-relative-time-status__time,
+	.post-relative-time-status__status {
 		display: inline-block;
 		margin-right: (11 / 12) * 1em;
 	}
 
-	.time .time-text {
+	.post-relative-time-status__time-text {
 		display: inline-block;
 		&::first-letter {
 			text-transform: capitalize;
 		}
 	}
 
-	.status .status-text {
+	.post-relative-time-status__status-text {
 		text-transform: capitalize;
 	}
 
