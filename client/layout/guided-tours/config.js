@@ -137,7 +137,7 @@ function get( tour ) {
 				next: 'search',
 			},
 			search: {
-				text: i18n.translate( 'You can search for themes here, try a few terms, find a theme you like' ),
+				text: i18n.translate( 'Here you can search for a specific theme name or feature, try trying something ( e.g. "business" ).' ),
 				type: 'ActionStep',
 				target: '.themes__search-card .search-open__icon',
 				placement: 'below',
@@ -172,24 +172,34 @@ function get( tour ) {
 				text: i18n.translate( 'You can filter between free & paid themes. Try filtering by free themes' ),
 				type: 'ActionStep',
 				target: '.themes__search-card .section-nav__mobile-header',
-				placement: 'below',
+				placement: 'above',
 				showInContext: () => isMobile(),
 				continueIf: state => {
 					const params = getQueryParams( state );
-					return params && params.tier === 'free';
+					return params && params.tier === 'free'; // probably want to allow any selection, and check it's changed
 				},
 				arrow: 'top-right',
 				next: 'choose-theme',
 			},
 			'choose-theme': {
-				text: i18n.translate( 'Click on any theme to see more details' ),
+				text: i18n.translate( 'Tap on any theme to see more details, or tap ••• to open all the theme options.' ),
 				type: 'ActionStep',
 				placement: 'right',
+				showInContext: state => getSectionName( state ) === 'themes',
 				continueIf: state => getSectionName( state ) === 'theme',
+				next: 'tab-bar',
+			},
+			'tab-bar': {
+				text: i18n.translate( 'Here you can read all the details about the theme, its support — and if available, the setup documentation.' ),
+				type: 'BasicStep',
+				placement: 'beside',
+				target: '.section-nav',
+				showInContext: state => getSectionName( state ) === 'theme',
+				arrow: 'left-top',
 				next: 'live-preview',
 			},
 			'live-preview': {
-				text: i18n.translate( 'Click to see a demo' ),
+				text: i18n.translate( 'Tap here to see a live demo of the theme.' ),
 				type: 'ActionStep',
 				placement: 'below',
 				target: 'theme-sheet-preview',
@@ -203,13 +213,13 @@ function get( tour ) {
 				type: 'ActionStep',
 				placement: 'beside',
 				icon: 'cross-small',
-				text: i18n.translate( 'Close the preview' ),
+				text: i18n.translate( 'Tap to close the live preview.' ),
 				showInContext: state => state && isPreviewShowing( state ),
 				next: 'finish',
 			},
 			finish: {
 				placement: 'center',
-				text: i18n.translate( "I guess that's it. I'll probably add some activation steps.", {
+				text: i18n.translate( "That's it! You can choose to activate this theme now, or continue having a look around.", {
 					components: {
 						strong: <strong />,
 					}
