@@ -1,3 +1,6 @@
+import createSelector from 'lib/create-selector';
+import purchasesAssembler from 'lib/purchases/assembler';
+
 /**
  * Return the list of purchases from state object
  *
@@ -13,7 +16,7 @@ export const getPurchases = state => state.purchases.data;
  * @return {Object} the matching purchase if there is one
  */
 export const getByPurchaseId = ( state, purchaseId ) => (
-	getPurchases( state ).filter( purchase => purchase.id === purchaseId ).shift()
+	purchasesAssembler.createPurchasesArray( getPurchases( state ).filter( purchase => purchase.ID === purchaseId ) ).shift()
 );
 
 export const isFetchingUserPurchases = state => state.purchases.isFetchingUserPurchases;
