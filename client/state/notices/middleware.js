@@ -15,8 +15,14 @@ import {
 	POST_SAVE_SUCCESS
 } from 'state/action-types';
 
-export const OBSERVERS = {
-	[ POST_DELETE_FAILURE ]: ( action, dispatch, getState ) => {
+/**
+ * Utility
+ */
+
+const dispatchSuccess = ( message ) => ( { dispatch } ) => dispatch( successNotice( message ) );
+
+export const HANDLERS = {
+	[ POST_DELETE_FAILURE ]: ( { dispatch, getState, action } ) => {
 		const post = getSitePost( getState(), action.siteId, action.postId );
 
 		let message;
@@ -30,10 +36,8 @@ export const OBSERVERS = {
 
 		dispatch( errorNotice( message ) );
 	},
-	[ POST_DELETE_SUCCESS ]: ( action, dispatch ) => {
-		dispatch( successNotice( translate( 'Post successfully deleted' ) ) );
-	},
-	[ POST_SAVE_SUCCESS ]: ( action, dispatch ) => {
+	[ POST_DELETE_SUCCESS ]: dispatchSuccess( translate( 'Post successfully deleted' ) ),
+	[ POST_SAVE_SUCCESS ]: ( { dispatch, action } ) => {
 		let text;
 		switch ( action.post.status ) {
 			case 'trash':
@@ -51,12 +55,10 @@ export const OBSERVERS = {
 	}
 };
 
-export default function noticesMiddleware( { dispatch, getState } ) {
-	return ( next ) => ( action ) => {
-		if ( OBSERVERS.hasOwnProperty( action.type ) ) {
-			OBSERVERS[ action.type ]( action, dispatch, getState );
-		}
+export default ( { dispatch, getState } ) => ( next ) => ( action ) => {
+	if ( HANDLERS.hasOwnProperty( action.type ) ) {
+		HANDLERS[ action.type ]( { dispatch, getState, action } );
+	}
 
-		return next( action );
-	};
-}
+	return next( action );
+};

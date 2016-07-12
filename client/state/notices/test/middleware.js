@@ -8,7 +8,7 @@ import { noop } from 'lodash';
 /**
  * Internal dependencies
  */
-import noticesMiddleware, { OBSERVERS } from '../middleware';
+import noticesMiddleware, { HANDLERS } from '../middleware';
 import { useSandbox } from 'test/helpers/use-sinon';
 import { successNotice } from 'state/notices/actions';
 import {
@@ -19,34 +19,24 @@ import {
 } from 'state/action-types';
 
 describe( 'middleware', () => {
-	let state = null,
-		store;
-
-	useSandbox( ( sandbox ) => {
-		store = createStore( noop );
-		sandbox.stub( store, 'getState', () => state );
-		sandbox.spy( store, 'dispatch' );
-	} );
-
-	beforeEach( () => {
-		state = null;
-	} );
-
 	describe( 'noticesMiddleware()', () => {
-		function dummyNoticeObserver( action, dispatch, getState ) {
-			dispatch( successNotice( `${ getState() } ${ action.target }` ) );
-		}
+		let store;
+		useSandbox( ( sandbox ) => {
+			store = createStore( () => 'Hello' );
+			sandbox.spy( store, 'dispatch' );
+		} );
 
 		before( () => {
-			OBSERVERS.DUMMY_TYPE = dummyNoticeObserver;
+			HANDLERS.DUMMY_TYPE = ( { action, dispatch, getState } ) => {
+				dispatch( successNotice( `${ getState() } ${ action.target }` ) );
+			};
 		} );
 
 		after( () => {
-			delete OBSERVERS.DUMMY_TYPE;
+			delete HANDLERS.DUMMY_TYPE;
 		} );
 
 		it( 'should trigger the observer corresponding to the dispatched action type', () => {
-			state = 'Hello';
 			noticesMiddleware( store )( noop )( { type: 'DUMMY_TYPE', target: 'World' } );
 
 			expect( store.dispatch ).to.have.been.calledWithMatch( {
@@ -58,29 +48,36 @@ describe( 'middleware', () => {
 		} );
 	} );
 
-	describe( 'OBSERVERS', () => {
+	describe( 'HANDLERS', () => {
+		let spy;
+		useSandbox( ( sandbox ) => {
+			spy = sandbox.spy();
+		} );
+
 		context( '.POST_DELETE_FAILURE', () => {
 			it( 'should dispatch error notice with truncated title if known', () => {
-				state = {
-					posts: {
-						items: {
-							'3d097cb7c5473c169bba0eb8e3c6cb64': {
-								ID: 841,
-								site_ID: 2916284,
-								global_ID: '3d097cb7c5473c169bba0eb8e3c6cb64',
-								title: 'Hello World, This Should Be Truncated'
+				HANDLERS[ POST_DELETE_FAILURE ]( {
+					dispatch: spy,
+					action: {
+						type: POST_DELETE_FAILURE,
+						siteId: 2916284,
+						postId: 841
+					},
+					getState: () => ( {
+						posts: {
+							items: {
+								'3d097cb7c5473c169bba0eb8e3c6cb64': {
+									ID: 841,
+									site_ID: 2916284,
+									global_ID: '3d097cb7c5473c169bba0eb8e3c6cb64',
+									title: 'Hello World, This Should Be Truncated'
+								}
 							}
 						}
-					}
-				};
-
-				noticesMiddleware( store )( noop )( {
-					type: POST_DELETE_FAILURE,
-					siteId: 2916284,
-					postId: 841
+					} )
 				} );
 
-				expect( store.dispatch ).to.have.been.calledWithMatch( {
+				expect( spy ).to.have.been.calledWithMatch( {
 					type: NOTICE_CREATE,
 					notice: {
 						status: 'is-error',
@@ -90,19 +87,21 @@ describe( 'middleware', () => {
 			} );
 
 			it( 'should dispatch error notice with unknown title', () => {
-				state = {
-					posts: {
-						items: {}
-					}
-				};
-
-				noticesMiddleware( store )( noop )( {
-					type: POST_DELETE_FAILURE,
-					siteId: 2916284,
-					postId: 841
+				HANDLERS[ POST_DELETE_FAILURE ]( {
+					dispatch: spy,
+					action: {
+						type: POST_DELETE_FAILURE,
+						siteId: 2916284,
+						postId: 841
+					},
+					getState: () => ( {
+						posts: {
+							items: {}
+						}
+					} )
 				} );
 
-				expect( store.dispatch ).to.have.been.calledWithMatch( {
+				expect( spy ).to.have.been.calledWithMatch( {
 					type: NOTICE_CREATE,
 					notice: {
 						status: 'is-error',
@@ -114,11 +113,14 @@ describe( 'middleware', () => {
 
 		context( '.POST_DELETE_SUCCESS', () => {
 			it( 'should dispatch success notice', () => {
-				noticesMiddleware( store )( noop )( {
-					type: POST_DELETE_SUCCESS
+				HANDLERS[ POST_DELETE_SUCCESS ]( {
+					dispatch: spy,
+					action: {
+						type: POST_DELETE_SUCCESS
+					}
 				} );
 
-				expect( store.dispatch ).to.have.been.calledWithMatch( {
+				expect( spy ).to.have.been.calledWithMatch( {
 					type: NOTICE_CREATE,
 					notice: {
 						status: 'is-success',
@@ -130,26 +132,32 @@ describe( 'middleware', () => {
 
 		context( '.POST_SAVE_SUCCESS', () => {
 			it( 'should not dispatch if status has no corresponding text', () => {
-				noticesMiddleware( store )( noop )( {
-					type: POST_SAVE_SUCCESS,
-					post: {
-						title: 'Hello World',
-						status: 'invalid'
+				HANDLERS[ POST_SAVE_SUCCESS ]( {
+					dispatch: spy,
+					action: {
+						type: POST_SAVE_SUCCESS,
+						post: {
+							title: 'Hello World',
+							status: 'invalid'
+						}
 					}
 				} );
 
-				expect( store.dispatch ).to.not.have.been.calledWithMatch( {
+				expect( spy ).to.not.have.been.calledWithMatch( {
 					type: NOTICE_CREATE
 				} );
 			} );
 
 			it( 'should dispatch success notice for trash', () => {
-				noticesMiddleware( store )( noop )( {
-					type: POST_SAVE_SUCCESS,
-					post: { status: 'trash' }
+				HANDLERS[ POST_SAVE_SUCCESS ]( {
+					dispatch: spy,
+					action: {
+						type: POST_SAVE_SUCCESS,
+						post: { status: 'trash' }
+					}
 				} );
 
-				expect( store.dispatch ).to.have.been.calledWithMatch( {
+				expect( spy ).to.have.been.calledWithMatch( {
 					type: NOTICE_CREATE,
 					notice: {
 						status: 'is-success',
@@ -159,12 +167,15 @@ describe( 'middleware', () => {
 			} );
 
 			it( 'should dispatch success notice for publish', () => {
-				noticesMiddleware( store )( noop )( {
-					type: POST_SAVE_SUCCESS,
-					post: { status: 'publish' }
+				HANDLERS[ POST_SAVE_SUCCESS ]( {
+					dispatch: spy,
+					action: {
+						type: POST_SAVE_SUCCESS,
+						post: { status: 'publish' }
+					}
 				} );
 
-				expect( store.dispatch ).to.have.been.calledWithMatch( {
+				expect( spy ).to.have.been.calledWithMatch( {
 					type: NOTICE_CREATE,
 					notice: {
 						status: 'is-success',
