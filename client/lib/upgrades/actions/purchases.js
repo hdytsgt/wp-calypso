@@ -69,33 +69,6 @@ function clearPurchases() {
 	olark.updateOlarkGroupAndEligibility();
 }
 
-function deleteStoredCard( card, onComplete ) {
-	Dispatcher.handleViewAction( {
-		type: ActionTypes.STORED_CARDS_DELETE,
-		card
-	} );
-
-	wpcom.me().storedCardDelete( card, ( error, data ) => {
-		debug( error, data );
-
-		const success = Boolean( data );
-
-		if ( success ) {
-			Dispatcher.handleServerAction( {
-				type: ActionTypes.STORED_CARDS_DELETE_COMPLETED,
-				card
-			} );
-		} else {
-			Dispatcher.handleServerAction( {
-				type: ActionTypes.STORED_CARDS_DELETE_FAILED,
-				error: error.message || i18n.translate( 'There was a problem deleting the stored card.' )
-			} );
-		}
-
-		onComplete( success );
-	} );
-}
-
 function fetchStoredCards() {
 	Dispatcher.handleViewAction( {
 		type: ActionTypes.STORED_CARDS_FETCH
@@ -182,7 +155,6 @@ export {
 	cancelPurchase,
 	cancelPrivateRegistration,
 	clearPurchases,
-	deleteStoredCard,
 	fetchStoredCards,
 	fetchUserPurchases,
 	removePurchase
