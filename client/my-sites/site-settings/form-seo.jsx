@@ -235,7 +235,7 @@ export const SeoForm = React.createClass( {
 			: siteTitle;
 		const siteUrl = `https://${ slug }/`;
 		const sitemapUrl = `${ siteUrl }/sitemap.xml`;
-		const siteSlug = get( this.props, 'site.wpcom_url' ) || slug;
+		const blavatarUrl = `${ get( this.props, 'site.icon.img', '//gravatar.com/avatar/' ) }?s=512`;
 		const generalTabUrl = getGeneralTabUrl( slug );
 		const placeholderTagContent = '1234';
 
@@ -326,7 +326,7 @@ export const SeoForm = React.createClass( {
 									url={ siteUrl }
 									type="website"
 									description={ seoMetaDescription }
-									slug={ siteSlug }
+									image={ blavatarUrl }
 								/>
 
 								<div style={ { marginBottom: '2em' } }>&nbsp;</div>
@@ -336,7 +336,7 @@ export const SeoForm = React.createClass( {
 									url={ siteUrl }
 									type="article"
 									description={ seoMetaDescription }
-									slug={ siteSlug }
+									image={ blavatarUrl }
 								/>
 							</FormFieldset>
 

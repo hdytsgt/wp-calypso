@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import PureRenderMixin from 'react-pure-render/mixin';
-import crypto from 'crypto';
 
 import {
 	firstValid,
@@ -15,15 +14,6 @@ const baseDomain = url =>
 	url
 		.replace( /^[^/]+[/]*/, '' ) // strip leading protocol
 		.replace( /\/.*$/, '' ); // strip everything after the domain
-
-const blavatarUrl = slug => {
-	const slugHash = crypto
-		.createHash( 'md5' )
-		.update( slug )
-		.digest( 'hex' );
-
-	return `https://secure.gravatar.com/blavatar/${ slugHash }?s=512`;
-};
 
 const facebookTitle = firstValid(
 	shortEnough( TITLE_LENGTH ),
@@ -44,15 +34,14 @@ export const FacebookPreview = React.createClass( {
 			type,
 			title,
 			description,
-			image,
-			slug
+			image
 		} = this.props;
 
 		return (
 			<div className={ `facebook-preview facebook-preview__${ type }` }>
 				<div className="facebook-preview__content">
 					<div className="facebook-preview__image">
-						<img src={ image || blavatarUrl( slug ) } />
+						<img src={ image } />
 					</div>
 					<div className="facebook-preview__body">
 						<div className="facebook-preview__title">
@@ -77,7 +66,6 @@ FacebookPreview.propTypes = {
 	title: PropTypes.string,
 	description: PropTypes.string,
 	image: PropTypes.string,
-	slug: PropTypes.string
 };
 
 export default FacebookPreview;
