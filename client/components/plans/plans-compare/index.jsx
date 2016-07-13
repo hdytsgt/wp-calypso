@@ -42,8 +42,7 @@ import InfoPopover from 'components/info-popover';
 import { isJetpack } from 'lib/site/utils';
 import {
 	featuresList,
-	FEATURE_GOOGLE_AD_CREDITS,
-	FEATURE_WORDADS_INSTANT,
+	FEATURE_GOOGLE_AD_CREDITS
 } from 'lib/plans/constants';
 
 // google ad credits feature
@@ -55,16 +54,6 @@ const googleAdCreditsFeature = {
 	1: false,
 	1003: '$100',
 	1008: '$100'
-};
-// WordAds instant activation feature
-const wordAdsInstant = featuresList[ FEATURE_WORDADS_INSTANT ];
-const wordAdsFeature = {
-	title: wordAdsInstant.getTitle(),
-	compareDescription: wordAdsInstant.getDescription(),
-	1: false,
-	1003: true,
-	1008: true,
-	product_slug: FEATURE_WORDADS_INSTANT,
 };
 
 const PlansCompare = React.createClass( {
@@ -207,10 +196,6 @@ const PlansCompare = React.createClass( {
 		if ( this.isUSorCanada() && isWordpressAdCreditsEnabled() ) {
 			googleAdCreditsFeature.compareDescription = googleAdCredits.getDescriptionWithWordAdsCredit();
 			googleAdCreditsFeature[ '1008' ] = '$200';
-		}
-
-		if ( isEnabled( 'manage/ads/wordads-instant' ) && abtest( 'wordadsInstantActivation' ) === 'enabled' ) {
-			features.splice( 6, 0, wordAdsFeature );
 		}
 
 		return features;

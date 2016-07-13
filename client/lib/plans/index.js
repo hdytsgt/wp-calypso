@@ -190,8 +190,7 @@ export function filterPlansBySiteAndProps( plans, site, hideFreePlan, intervalTy
 }
 
 export const isWordadsInstantActivationEnabled = () => {
-	return isEnabled( 'manage/ads/wordads-instant' ) &&
-		abtest( 'wordadsInstantActivation' ) === 'enabled';
+	return isEnabled( 'manage/ads/wordads-instant' );
 };
 
 export const isGoogleVouchersEnabled = () => {
@@ -223,11 +222,6 @@ export function applyTestFiltersToPlansList( planName ) {
 	let filteredPlanFeaturesConstantObj = pick( featuresList, plansList[ planName ].getFeatures() );
 
 	const removeDisabledFeatures = () => {
-		if ( ! isWordadsInstantActivationEnabled() ) {
-			filteredPlanFeaturesConstantObj = pickBy( filteredPlanFeaturesConstantObj,
-				( value, key ) => key !== FEATURE_WORDADS_INSTANT
-			);
-		}
 		if ( ! isGoogleVouchersEnabled() ) {
 			filteredPlanFeaturesConstantObj = pickBy( filteredPlanFeaturesConstantObj,
 				( value, key ) => key !== FEATURE_GOOGLE_AD_CREDITS
