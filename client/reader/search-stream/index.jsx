@@ -17,6 +17,8 @@ import SearchInput from 'components/search';
 import SearchCard from 'components/post-card/search';
 import SiteStore from 'lib/reader-site-store';
 import FeedStore from 'lib/feed-store';
+import shuffle from 'lodash/shuffle';
+var i18nUtils = require( 'lib/i18n-utils' );
 
 //const stats = require( 'reader/stats' );
 //
@@ -90,6 +92,56 @@ const emptyStore = {
 
 const FeedStream = React.createClass( {
 
+	searchSuggestions: {
+		"en": [
+			"2016 Election",
+			"Astrology",
+			"Batman",
+			"Beach",
+			"Beautiful",
+			"Bloom",
+			"Chickens",
+			"Clinton",
+			"Cocktails",
+			"Craft Beer",
+			"Cute",
+			"DIY",
+			"Delicious",
+			"Dogs",
+			"Elasticsearch",
+			"Fabulous",
+			"Farm",
+			"Flowers",
+			"Funny",
+			"Garden",
+			"Groovy",
+			"Happy Place",
+			"Homesteading",
+			"Iceland",
+			"Inspiration",
+			"Juno",
+			"Mathematics",
+			"Michigan",
+			"Monkeys",
+			"Mountain Biking",
+			"Obama",
+			"Overwatch",
+			"Pokemon GO",
+			"Pride",
+			"Recipe",
+			"Red Sox",
+			"Robots",
+			"Scenic",
+			"Sous vide",
+			"Sunday Brunch",
+			"Toddlers",
+			"Trump",
+			"Woodworking",
+			"WordPress",
+			"Zombies",
+		]
+	},
+
 	propTypes: {
 		query: React.PropTypes.string
 	},
@@ -135,9 +187,22 @@ const FeedStream = React.createClass( {
 	},
 
 	render() {
+		var suggestions = null;
+		var lang = i18nUtils.getLocaleSlug();
+		if ( this.searchSuggestions[lang] ) {
+			suggestions = shuffle( this.searchSuggestions[lang] ).slice( 0, 3 );
+			suggestions = suggestions.map( function( query ) {
+				return <a href={ '/read/search?q=' + encodeURIComponent( query ) } >{ query }</a>;
+			} );
+			//join the link elements into a comma separated list
+			suggestions = suggestions.slice(1).reduce(function(xs, x, i) {
+				return xs.concat([', ', x]);
+			}, [ suggestions[0] ] );
+		}
+
 		const emptyContent = this.props.query
 			? <EmptyContent query={ this.props.query } />
-			: <BlankContent />;
+			: <BlankContent suggestions={ suggestions }/>;
 
 		if ( this.props.setPageTitle ) {
 			this.props.setPageTitle( this.state.title || this.translate( 'Search' ) );
