@@ -29,6 +29,7 @@ function getStateFromStores( props ) {
 		card: StoredCardsStore.getByCardId( parseInt( props.cardId, 10 ) ),
 		countriesList: CountriesList.forPayments(),
 		hasLoadedSites: props.hasLoadedSites,
+		isDataLoading,
 		selectedPurchase: PurchasesStore.getByPurchaseId( parseInt( props.purchaseId, 10 ) ),
 		selectedSite: props.selectedSite
 	};

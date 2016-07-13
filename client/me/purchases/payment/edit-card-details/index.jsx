@@ -19,7 +19,7 @@ import FormButton from 'components/forms/form-button';
 import formState from 'lib/form-state';
 import forOwn from 'lodash/forOwn';
 import HeaderCake from 'components/header-cake' ;
-import { getPurchase, goToManagePurchase, isDataLoading, recordPageView } from 'me/purchases/utils';
+import { getPurchase, goToManagePurchase, recordPageView } from 'me/purchases/utils';
 import { isRenewing } from 'lib/purchases';
 import kebabCase from 'lodash/kebabCase';
 import Main from 'components/main';
@@ -37,6 +37,7 @@ const EditCardDetails = React.createClass( {
 	propTypes: {
 		card: React.PropTypes.object,
 		countriesList: React.PropTypes.object.isRequired,
+		isDataLoading: React.PropTypes.func.isRequired,
 		selectedPurchase: React.PropTypes.object.isRequired,
 		selectedSite: React.PropTypes.oneOfType( [
 			React.PropTypes.object,
@@ -219,7 +220,7 @@ const EditCardDetails = React.createClass( {
 	},
 
 	isDataValid( props = this.props ) {
-		if ( isDataLoading( props ) ) {
+		if ( this.props.isDataLoading( props ) ) {
 			return true;
 		}
 
@@ -250,14 +251,6 @@ const EditCardDetails = React.createClass( {
 	},
 
 	render() {
-		if ( isDataLoading( this.props ) ) {
-			return (
-				<Main className="edit-card-details">
-					{ this.translate( 'Loading…' ) }
-				</Main>
-			);
-		}
-
 		const title = isRenewing( getPurchase( this.props ) ) ? titles.editCardDetails : titles.addCardDetails;
 
 		return (
