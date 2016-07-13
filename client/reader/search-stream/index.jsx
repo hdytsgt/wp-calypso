@@ -17,7 +17,7 @@ import SearchInput from 'components/search';
 import SearchCard from 'components/post-card/search';
 import SiteStore from 'lib/reader-site-store';
 import FeedStore from 'lib/feed-store';
-import shuffle from 'lodash/shuffle';
+import sampleSize from 'lodash/sampleSize';
 var i18nUtils = require( 'lib/i18n-utils' );
 
 //const stats = require( 'reader/stats' );
@@ -147,7 +147,13 @@ const FeedStream = React.createClass( {
 	},
 
 	getInitialState() {
+		var suggestions = null;
+		const lang = i18nUtils.getLocaleSlug();
+		if ( this.searchSuggestions[lang] ) {
+			suggestions = sampleSize( this.searchSuggestions[lang], 3 );
+		}
 		return {
+			suggestions: suggestions,
 			title: this.getTitle()
 		};
 	},
@@ -187,22 +193,9 @@ const FeedStream = React.createClass( {
 	},
 
 	render() {
-		var suggestions = null;
-		var lang = i18nUtils.getLocaleSlug();
-		if ( this.searchSuggestions[lang] ) {
-			suggestions = shuffle( this.searchSuggestions[lang] ).slice( 0, 3 );
-			suggestions = suggestions.map( function( query ) {
-				return <a href={ '/read/search?q=' + encodeURIComponent( query ) } >{ query }</a>;
-			} );
-			//join the link elements into a comma separated list
-			suggestions = suggestions.slice(1).reduce(function(xs, x, i) {
-				return xs.concat([', ', x]);
-			}, [ suggestions[0] ] );
-		}
-
 		const emptyContent = this.props.query
 			? <EmptyContent query={ this.props.query } />
-			: <BlankContent suggestions={ suggestions }/>;
+			: <BlankContent suggestions={ this.state.suggestions }/>;
 
 		if ( this.props.setPageTitle ) {
 			this.props.setPageTitle( this.state.title || this.translate( 'Search' ) );
