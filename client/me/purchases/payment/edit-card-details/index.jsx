@@ -2,6 +2,7 @@
  * External Dependencies
  */
 import assign from 'lodash/assign';
+import { connect } from 'react-redux';
 import page from 'page';
 import React from 'react';
 
@@ -20,6 +21,7 @@ import formState from 'lib/form-state';
 import forOwn from 'lodash/forOwn';
 import HeaderCake from 'components/header-cake' ;
 import { getPurchase, goToManagePurchase, recordPageView } from 'me/purchases/utils';
+import { getStoredCardById, isFetchingStoredCards } from 'state/stored-cards/selectors';
 import { isRenewing } from 'lib/purchases';
 import kebabCase from 'lodash/kebabCase';
 import Main from 'components/main';
@@ -36,8 +38,10 @@ const wpcom = wpcomFactory.undocumented();
 const EditCardDetails = React.createClass( {
 	propTypes: {
 		card: React.PropTypes.object,
+		cardId: React.PropTypes.string,
 		countriesList: React.PropTypes.object.isRequired,
 		isDataLoading: React.PropTypes.func.isRequired,
+		isFetchingStoredCards: React.PropTypes.bool.isRequired,
 		selectedPurchase: React.PropTypes.object.isRequired,
 		selectedSite: React.PropTypes.oneOfType( [
 			React.PropTypes.object,
@@ -81,8 +85,9 @@ const EditCardDetails = React.createClass( {
 		recordPageView( 'edit_card_details', this.props );
 
 		let fields = formState.createNullFieldValues( this.fieldNames );
-		if ( this.props.card.data ) {
-			fields = this.mergeCard( this.props.card.data, fields );
+
+		if ( this.props.card ) {
+			fields = this.mergeCard( this.props.card, fields );
 		}
 
 		this.formStateController = formState.Controller( {
@@ -284,4 +289,9 @@ const EditCardDetails = React.createClass( {
 	}
 } );
 
-export default EditCardDetails;
+export default connect(
+	( state, props ) => ( {
+		card: getStoredCardById( state, props.cardId ),
+		isFetchingStoredCards: isFetchingStoredCards( state )
+	} )
+)( EditCardDetails );

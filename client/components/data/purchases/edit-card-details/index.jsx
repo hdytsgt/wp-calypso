@@ -7,26 +7,25 @@ import React from 'react';
  * Internal dependencies
  */
 import CountriesList from 'lib/countries-list';
-import { fetchStoredCards, fetchUserPurchases } from 'lib/upgrades/actions';
+import { fetchUserPurchases } from 'lib/upgrades/actions';
 import observe from 'lib/mixins/data-observe';
 import PurchasesStore from 'lib/purchases/store';
+import QueryStoredCards from 'components/data/query-stored-cards';
 import { shouldFetchUserPurchases } from 'lib/purchases';
 import StoreConnection from 'components/data/store-connection';
-import StoredCardsStore from 'lib/purchases/stored-cards/store';
 import userFactory from 'lib/user';
 
 /**
  * Module variables
  */
 const stores = [
-		PurchasesStore,
-		StoredCardsStore
+		PurchasesStore
 	],
 	user = userFactory();
 
 function getStateFromStores( props ) {
 	return {
-		card: StoredCardsStore.getByCardId( parseInt( props.cardId, 10 ) ),
+		cardId: props.cardId,
 		countriesList: CountriesList.forPayments(),
 		hasLoadedSites: props.hasLoadedSites,
 		isDataLoading,
@@ -37,9 +36,9 @@ function getStateFromStores( props ) {
 
 function isDataLoading( state ) {
 	return (
-		state.card.isFetching ||
 		! state.selectedPurchase.hasLoadedUserPurchasesFromServer ||
-		! state.hasLoadedSites
+		! state.hasLoadedSites ||
+		state.isFetchingStoredCards
 	);
 }
 
@@ -55,7 +54,6 @@ const EditCardDetailsData = React.createClass( {
 	mixins: [ observe( 'sites' ) ],
 
 	componentWillMount() {
-		fetchStoredCards();
 		if ( shouldFetchUserPurchases( PurchasesStore.get() ) ) {
 			fetchUserPurchases( user.get().ID );
 		}
@@ -63,16 +61,20 @@ const EditCardDetailsData = React.createClass( {
 
 	render() {
 		return (
-			<StoreConnection
-				cardId={ this.props.cardId }
-				component={ this.props.component }
-				getStateFromStores={ getStateFromStores }
-				hasLoadedSites={ this.props.sites.fetched }
-				isDataLoading={ isDataLoading }
-				loadingPlaceholder={ this.props.loadingPlaceholder }
-				purchaseId={ this.props.purchaseId }
-				selectedSite={ this.props.sites.getSelectedSite() }
-				stores={ stores } />
+			<div>
+				<QueryStoredCards />
+
+				<StoreConnection
+					cardId={ this.props.cardId }
+					component={ this.props.component }
+					getStateFromStores={ getStateFromStores }
+					hasLoadedSites={ this.props.sites.fetched }
+					isDataLoading={ isDataLoading }
+					loadingPlaceholder={ this.props.loadingPlaceholder }
+					purchaseId={ this.props.purchaseId }
+					selectedSite={ this.props.sites.getSelectedSite() }
+					stores={ stores } />
+			</div>
 		);
 	}
 } );
