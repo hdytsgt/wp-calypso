@@ -32,7 +32,6 @@ import {
 	PLAN_PERSONAL,
 	PLAN_PREMIUM,
 	PLAN_BUSINESS,
-	FEATURE_WORDADS_INSTANT,
 	FEATURE_GOOGLE_AD_CREDITS
 } from 'lib/plans/constants';
 import { createSitePlanObject } from 'state/sites/plans/assembler';
