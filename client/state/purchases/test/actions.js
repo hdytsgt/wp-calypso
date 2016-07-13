@@ -30,7 +30,9 @@ describe( 'actions', () => {
 		fetchSitePurchases,
 		fetchUserPurchases,
 		removePurchase;
-	useMockery( mockery => {
+	useMockery( function( mockery ) { // must be a function() instead of => because we want the mockery context to set the timeout
+		this.timeout( 10000 );
+
 		mockery.registerMock( 'lib/olark', {
 			updateOlarkGroupAndEligibility: () => {}
 		} );
