@@ -90,3 +90,15 @@ export function isPreviewShowing( state ) {
 export function getPreviewUrl( state ) {
 	return state.ui.currentPreviewUrl;
 }
+
+export function getCurrentLayoutFocus( state ) {
+	return state.ui.layoutFocus.current;
+}
+
+export function getPreviousLayoutFocus( state ) {
+	return state.ui.layoutFocus.previous;
+}
+
+export function getNextLayoutFocus( state ) {
+	return state.ui.layoutFocus.next;
+}

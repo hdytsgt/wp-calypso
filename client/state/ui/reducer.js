@@ -2,11 +2,15 @@
  * External dependencies
  */
 import { combineReducers } from 'redux';
+import includes from 'lodash/includes';
 
 /**
  * Internal dependencies
  */
 import {
+	LAYOUT_SET_FOCUS,
+	LAYOUT_NEXT_FOCUS_ACTIVATE,
+	LAYOUT_SET_NEXT_FOCUS,
 	SELECTED_SITE_SET,
 	SECTION_SET,
 	PREVIEW_IS_SHOWING,
@@ -98,9 +102,37 @@ export function currentPreviewUrl( state = null, action ) {
 	return state;
 }
 
+export function layoutFocus( state = { current: null, previous: null, next: null }, action ) {
+	const validAreas = [ 'content', 'sidebar', 'sites', 'preview' ];
+	const isValidArea = area => includes( validAreas, area );
+	switch ( action.type ) {
+		case LAYOUT_SET_FOCUS:
+			if ( ! isValidArea( action.area ) ) {
+				return state;
+			}
+			return Object.assign( {}, state, { current: action.area, previous: state.current } );
+		case LAYOUT_SET_NEXT_FOCUS:
+			if ( ! isValidArea( action.area ) ) {
+				return state;
+			}
+			return Object.assign( {}, state, { next: action.area } );
+		case LAYOUT_NEXT_FOCUS_ACTIVATE:
+			// If we don't have a change queued and the focus has changed
+			// previously, set it to `content`. This avoids having to set the
+			// focus to content on all navigation links because it becomes the
+			// default after focus has shifted.
+			if ( ! state.previous ) {
+				return state;
+			}
+			return Object.assign( {}, state, { current: state.next || 'content', previous: state.current, next: null } );
+	}
+	return state;
+}
+
 const reducer = combineReducers( {
 	section,
 	isLoading,
+	layoutFocus,
 	hasSidebar,
 	isPreviewShowing,
 	currentPreviewUrl,
