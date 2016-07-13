@@ -22,8 +22,10 @@ function cancelPrivateRegistration( siteName, purchaseId ) {
 	return managePurchase( siteName, purchaseId ) + '/cancel-private-registration';
 }
 
-function editCardDetails( siteName, purchaseId ) {
-	return editPaymentMethod( siteName, purchaseId ) + `/edit`;
+function editCardDetails( siteName, purchaseId, cardId = ':cardId' ) {
+	const suffix = cardId ? '/' + cardId : '';
+
+	return editPaymentMethod( siteName, purchaseId ) + `/edit` + suffix;
 }
 
 function editPaymentMethod( siteName, purchaseId ) {
