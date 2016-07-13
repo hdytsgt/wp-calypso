@@ -62,7 +62,7 @@
 	max-width: 616px;
 }
 
-.facebook-opengraph-preview {
+.facebook-preview {
 	border: 1px solid;
 	border-color: #e9ebee #e9ebee #d1d1d1;
 	display: flex;
@@ -72,18 +72,18 @@
 	-webkit-overflow-scrolling: touch;
 }
 
-.facebook-opengraph-preview__content {
+.facebook-preview__content {
 	display: flex;
 	flex-shrink: 0;
 }
 
-.facebook-opengraph-preview__body {
+.facebook-preview__body {
 	display: flex;
 	flex-direction: column;
 	margin: 10px 12px;
 }
 
-.facebook-opengraph-preview__title {
+.facebook-preview__title {
 	color: #1d2129;
 	font-family: Georgia, serif;
 	font-size: 18px;
@@ -93,7 +93,7 @@
 	transition: color 0.1s ease-in-out;
 }
 
-.facebook-opengraph-preview__description {
+.facebook-preview__description {
 	color: #4b4f56;
 	font-family: helvetica, arial, sans-serif;
 	font-size: 12px;
@@ -101,7 +101,7 @@
 	max-height: 80px;
 }
 
-.facebook-opengraph-preview__url {
+.facebook-preview__url {
 	color: #90949c;
 	font-family: helvetica, arial, sans-serif;
 	font-size: 11px;
@@ -111,13 +111,13 @@
 	white-space: nowrap;
 }
 
-.facebook-opengraph-preview__article {
-	.facebook-opengraph-preview__content {
+.facebook-preview__article {
+	.facebook-preview__content {
 		flex-direction: column;
 		min-width: 100%;
 	}
 
-	.facebook-opengraph-preview__image {
+	.facebook-preview__image {
 		height: auto;
 		max-height: 250px;
 		width: 100%;
@@ -129,24 +129,24 @@
 		}
 	}
 
-	.facebook-opengraph-preview__body {
+	.facebook-preview__body {
 		height: auto;
 		max-height: 100px;
 	}
 
-	.facebook-opengraph-preview__title {
+	.facebook-preview__title {
 		margin-bottom: 5px;
 	}
 
-	.facebook-opengraph-preview__url {
+	.facebook-preview__url {
 		margin-top: 9px;
 	}
 }
 
-.facebook-opengraph-preview__website {
+.facebook-preview__website {
 	max-height: 158px;
 
-	.facebook-opengraph-preview__image {
+	.facebook-preview__image {
 		height: 100%;
 		width: 158px;
 
@@ -156,16 +156,16 @@
 		}
 	}
 
-	.facebook-opengraph-preview__body {
+	.facebook-preview__body {
 		height: 138px;
 	}
 
-	.facebook-opengraph-preview__title {
+	.facebook-preview__title {
 		margin-bottom: 5px;
 		max-height: 110px;
 	}
 
-	.facebook-opengraph-preview__url {
+	.facebook-preview__url {
 		margin-top: auto;
 	}
 }

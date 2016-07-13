@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import PureRenderMixin from 'react-pure-render/mixin';
-import classNames from 'classnames';
 import crypto from 'crypto';
 
 import {
@@ -49,24 +48,20 @@ export const FacebookPreview = React.createClass( {
 			slug
 		} = this.props;
 
-		const previewClasses = classNames( 'facebook-opengraph-preview', {
-			[ `facebook-opengraph-preview__${ type }` ]: true
-		} );
-
 		return (
-			<div className={ previewClasses }>
-				<div className="facebook-opengraph-preview__content">
-					<div className="facebook-opengraph-preview__image">
+			<div className={ `facebook-preview facebook-preview__${ type }` }>
+				<div className="facebook-preview__content">
+					<div className="facebook-preview__image">
 						<img src={ image || blavatarUrl( slug ) } />
 					</div>
-					<div className="facebook-opengraph-preview__body">
-						<div className="facebook-opengraph-preview__title">
+					<div className="facebook-preview__body">
+						<div className="facebook-preview__title">
 							{ facebookTitle( title || '' ) }
 						</div>
-						<div className="facebook-opengraph-preview__description">
+						<div className="facebook-preview__description">
 							{ facebookDesription( description || '' ) }
 						</div>
-						<div className="facebook-opengraph-preview__url">
+						<div className="facebook-preview__url">
 							{ baseDomain( url ) }
 						</div>
 					</div>
