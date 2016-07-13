@@ -189,10 +189,6 @@ export function filterPlansBySiteAndProps( plans, site, hideFreePlan, intervalTy
 	} );
 }
 
-export const isWordadsInstantActivationEnabled = () => {
-	return isEnabled( 'manage/ads/wordads-instant' );
-};
-
 export const isGoogleVouchersEnabled = () => {
 	return ( isEnabled( 'google-voucher' ) && abtest( 'googleVouchers' ) === 'enabled' );
 };
@@ -230,11 +226,7 @@ export function applyTestFiltersToPlansList( planName ) {
 	};
 
 	const updatePlanDescriptions = () => {
-		if ( isWordadsInstantActivationEnabled() && isGoogleVouchersEnabled() && planName === PLAN_PREMIUM ) {
-			filteredPlanConstantObj.getDescription = plansList[ planName ].getDescriptionWithWordAdsInstantActivationAndGoogleVouchers;
-		} else if ( isWordadsInstantActivationEnabled() && planName === PLAN_PREMIUM ) {
-			filteredPlanConstantObj.getDescription = plansList[ planName ].getDescriptionWithWordAdsInstantActivation;
-		} else if ( isGoogleVouchersEnabled() && planName === PLAN_PREMIUM ) {
+		if ( isGoogleVouchersEnabled() && planName === PLAN_PREMIUM ) {
 			filteredPlanConstantObj.getDescription = plansList[ planName ].getDescriptionWithGoogleVouchers;
 		} else if ( isWordpressAdCreditsEnabled() && planName === PLAN_BUSINESS ) {
 			filteredPlanConstantObj.getDescription = plansList[ planName ].getDescriptionWithWordAdsCredit;
