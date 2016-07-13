@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-import PureRenderMixin from 'react-pure-render/mixin';
+import React, { Component, PropTypes } from 'react';
+import shallowCompare from 'react-addons-shallow-compare';
 
 import {
 	firstValid,
@@ -20,13 +20,15 @@ const facebookTitle = firstValid(
 	hardTruncation( TITLE_LENGTH )
 );
 
-const facebookDesription = firstValid(
+const facebookDescription = firstValid(
 	shortEnough( DESCRIPTION_LENGTH ),
 	hardTruncation( DESCRIPTION_LENGTH )
 );
 
-export const FacebookPreview = React.createClass( {
-	mixins: [ PureRenderMixin ],
+export class FacebookPreview extends Component {
+	shouldComponentUpdate( nextProps, nextState ) {
+		return shallowCompare( this, nextProps, nextState );
+	}
 
 	render() {
 		const {
@@ -48,7 +50,7 @@ export const FacebookPreview = React.createClass( {
 							{ facebookTitle( title || '' ) }
 						</div>
 						<div className="facebook-preview__description">
-							{ facebookDesription( description || '' ) }
+							{ facebookDescription( description || '' ) }
 						</div>
 						<div className="facebook-preview__url">
 							{ baseDomain( url ) }
@@ -58,7 +60,7 @@ export const FacebookPreview = React.createClass( {
 			</div>
 		);
 	}
-} );
+}
 
 FacebookPreview.propTypes = {
 	url: PropTypes.string,
