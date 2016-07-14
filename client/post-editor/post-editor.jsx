@@ -174,7 +174,7 @@ const PostEditor = React.createClass( {
 		user: React.PropTypes.object,
 		userUtils: React.PropTypes.object,
 		editPath: React.PropTypes.string,
-		setLayoutFocus: ReactDom.PropTypes.func.isRequired,
+		setLayoutFocus: React.PropTypes.func.isRequired,
 	},
 
 	_previewWindow: null,
