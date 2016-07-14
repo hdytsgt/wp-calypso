@@ -27,7 +27,7 @@ describe( 'Sidebar', () => {
 
 	describe( '#isItemLinkSelected()', () => {
 		it( 'should return false if none of the paths are a prefix', () => {
-			const isSelected = Sidebar.prototype.isItemLinkSelected.call( {
+			const isSelected = Sidebar.WrappedComponent.prototype.isItemLinkSelected.call( {
 				props: {
 					path: '/posts/example.wordpress.com'
 				}
@@ -37,7 +37,7 @@ describe( 'Sidebar', () => {
 		} );
 
 		it( 'should return false if one of the paths is a prefix, but not at end or separated by slash', () => {
-			const isSelected = Sidebar.prototype.isItemLinkSelected.call( {
+			const isSelected = Sidebar.WrappedComponent.prototype.isItemLinkSelected.call( {
 				props: {
 					path: '/types/jetpack-testimonial-jk'
 				}
@@ -47,7 +47,7 @@ describe( 'Sidebar', () => {
 		} );
 
 		it( 'should return true if one of the paths is a prefix of the current path and separated by slash', () => {
-			const isSelected = Sidebar.prototype.isItemLinkSelected.call( {
+			const isSelected = Sidebar.WrappedComponent.prototype.isItemLinkSelected.call( {
 				props: {
 					path: '/types/jetpack-testimonial/example.wordpress.com'
 				}
@@ -57,7 +57,7 @@ describe( 'Sidebar', () => {
 		} );
 
 		it( 'should return true if one of the paths is a prefix of the current path and at end', () => {
-			const isSelected = Sidebar.prototype.isItemLinkSelected.call( {
+			const isSelected = Sidebar.WrappedComponent.prototype.isItemLinkSelected.call( {
 				props: {
 					path: '/types/jetpack-testimonial'
 				}
@@ -67,7 +67,7 @@ describe( 'Sidebar', () => {
 		} );
 
 		it( 'should accept a path string', () => {
-			const isSelected = Sidebar.prototype.isItemLinkSelected.call( {
+			const isSelected = Sidebar.WrappedComponent.prototype.isItemLinkSelected.call( {
 				props: {
 					path: '/types/jetpack-testimonial'
 				}
