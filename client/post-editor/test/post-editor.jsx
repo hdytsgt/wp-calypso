@@ -64,7 +64,6 @@ describe( 'PostEditor', function() {
 		SitesList = require( 'lib/sites-list/list' );
 		PostEditStore = require( 'lib/posts/post-edit-store' );
 		PostEditor = require( '../post-editor' );
-		PostEditor.prototype.translate = ( string ) => string;
 	} );
 
 	afterEach( function() {
