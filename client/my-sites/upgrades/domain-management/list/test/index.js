@@ -7,6 +7,8 @@ import assert from 'assert';
 /**
  * Internal dependencies
  */
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import EmptyComponent from 'test/helpers/react/empty-component';
 import useFakeDom from 'test/helpers/use-fake-dom';
 import useMockery from 'test/helpers/use-mockery';
@@ -72,7 +74,8 @@ describe( 'index', function() {
 	} );
 
 	function renderWithProps( props = defaultProps ) {
-		return ReactDom.render( <DomainList { ...props } />, useFakeDom.getContainer() );
+		const store = createStore( state => state );
+		return ReactDom.render( <Provider store={ store }><DomainList { ...props } /></Provider>, useFakeDom.getContainer() );
 	}
 
 	describe( 'regular cases', function() {
