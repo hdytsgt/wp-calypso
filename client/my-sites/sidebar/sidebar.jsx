@@ -8,7 +8,7 @@ var analytics = require( 'lib/analytics' ),
 	includes = require( 'lodash/includes' ),
 	React = require( 'react' );
 
-import page from 'page';
+import { connect } from 'react-redux';
 
 /**
  * Internal dependencies
@@ -30,8 +30,9 @@ import Button from 'components/button';
 import SidebarButton from 'layout/sidebar/button';
 import SidebarFooter from 'layout/sidebar/footer';
 import { isPersonal, isPremium, isBusiness } from 'lib/products-values';
+import { setLayoutFocus, setNextLayoutFocus } from 'state/ui/actions';
 
-module.exports = React.createClass( {
+const MySitesSidebar = React.createClass( {
 	displayName: 'MySitesSidebar',
 
 	componentDidMount: function() {
@@ -39,7 +40,7 @@ module.exports = React.createClass( {
 	},
 
 	onNavigate: function() {
-		this.props.layoutFocus.setNext( 'content' );
+		this.props.setNextLayoutFocus( 'content' );
 		window.scrollTo( 0, 0 );
 	},
 
@@ -47,7 +48,7 @@ module.exports = React.createClass( {
 		const site = this.getSelectedSite();
 		if ( site.is_previewable && ! event.metaKey && ! event.ctrlKey ) {
 			event.preventDefault();
-			this.props.layoutFocus.set( 'preview' );
+			this.props.setLayoutFocus( 'preview' );
 		}
 	},
 
@@ -653,7 +654,7 @@ module.exports = React.createClass( {
 	},
 
 	focusContent: function() {
-		this.props.layoutFocus.set( 'content' );
+		this.props.setLayoutFocus( 'content' );
 	},
 
 	addNewWordPress: function() {
@@ -750,3 +751,5 @@ module.exports = React.createClass( {
 		);
 	}
 } );
+
+export default connect( null, { setNextLayoutFocus, setLayoutFocus } )( MySitesSidebar );

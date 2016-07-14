@@ -3,17 +3,20 @@
  */
 const React = require( 'react' );
 
+import { connect } from 'react-redux';
+
 /**
  * Internal dependencies
  */
 const Site = require( 'my-sites/site' ),
-	Gridicon = require( 'components/gridicon' ),
-	layoutFocus = require( 'lib/layout-focus' );
+	Gridicon = require( 'components/gridicon' );
+
+import { setLayoutFocus } from 'state/ui/actions';
 
 const EditorMobileNavigation = React.createClass( {
 
 	toggleSidebar: function() {
-		layoutFocus.set( 'sidebar' );
+		this.props.setLayoutFocus( 'sidebar' );
 	},
 
 	render: function() {
@@ -36,4 +39,4 @@ const EditorMobileNavigation = React.createClass( {
 	}
 } );
 
-module.exports = EditorMobileNavigation;
+module.exports = connect( null, { setLayoutFocus } )( EditorMobileNavigation );

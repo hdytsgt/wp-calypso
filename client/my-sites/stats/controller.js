@@ -16,8 +16,9 @@ import sitesFactory from 'lib/sites-list';
 import route from 'lib/route';
 import analytics from 'lib/analytics';
 import titlecase from 'to-title-case';
-import layoutFocus from 'lib/layout-focus';
 import titleActions from 'lib/screen-title/actions';
+import { getCurrentLayoutFocus } from 'state/ui/selectors';
+import { setNextLayoutFocus } from 'state/ui/actions';
 
 const user = userFactory();
 const sites = sitesFactory();
@@ -106,7 +107,7 @@ module.exports = {
 
 		if ( siteFragment ) {
 			// if we are redirecting we need to retain our intended layout-focus
-			layoutFocus.setNext( layoutFocus.getCurrent() );
+			context.store.dispatch( setNextLayoutFocus( getCurrentLayoutFocus( context.store.getState() ) ) );
 			page.redirect( route.getStatsDefaultSitePage( siteFragment ) );
 		} else {
 			next();

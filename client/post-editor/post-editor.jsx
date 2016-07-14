@@ -31,7 +31,6 @@ const actions = require( 'lib/posts/actions' ),
 	SegmentedControl = require( 'components/segmented-control' ),
 	SegmentedControlItem = require( 'components/segmented-control/item' ),
 	EditorMobileNavigation = require( 'post-editor/editor-mobile-navigation' ),
-	layoutFocus = require( 'lib/layout-focus' ),
 	observe = require( 'lib/mixins/data-observe' ),
 	DraftList = require( 'my-sites/drafts/draft-list' ),
 	InvalidURLDialog = require( 'post-editor/invalid-url-dialog' ),
@@ -55,6 +54,7 @@ import { savePreference } from 'state/preferences/actions';
 import { getPreference } from 'state/preferences/selectors';
 import QueryPreferences from 'components/data/query-preferences';
 import SidebarFooter from 'layout/sidebar/footer';
+import { setLayoutFocus } from 'state/ui/actions';
 
 const messages = {
 	post: {
@@ -173,7 +173,8 @@ const PostEditor = React.createClass( {
 		sites: React.PropTypes.object,
 		user: React.PropTypes.object,
 		userUtils: React.PropTypes.object,
-		editPath: React.PropTypes.string
+		editPath: React.PropTypes.string,
+		setLayoutFocus: ReactDom.PropTypes.func.isRequired,
 	},
 
 	_previewWindow: null,
@@ -290,7 +291,7 @@ const PostEditor = React.createClass( {
 
 	toggleSidebar: function() {
 		this.hideDrafts();
-		layoutFocus.set( 'content' );
+		this.props.setLayoutFocus( 'content' );
 	},
 
 	hideDrafts() {
@@ -725,12 +726,12 @@ const PostEditor = React.createClass( {
 			// so we need to delay opening it a bit to avoid flickering
 			setTimeout( function() {
 				this.setState( { showPreview: true }, function() {
-					layoutFocus.set( 'content' );
+					this.props.setLayoutFocus( 'content' );
 				} );
 			}.bind( this ), 150 );
 		} else {
 			this.setState( { showPreview: true }, function() {
-				layoutFocus.set( 'content' );
+				this.props.setLayoutFocus( 'content' );
 			} );
 		}
 	},
@@ -931,6 +932,7 @@ export default connect(
 			receivePost,
 			editPost,
 			resetPostEdits,
+			setLayoutFocus,
 			setEditorPostId,
 			setEditorModePreference: savePreference.bind( null, 'editor-mode' ),
 		}, dispatch );
