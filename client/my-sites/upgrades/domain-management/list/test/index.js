@@ -107,9 +107,13 @@ describe( 'index', function() {
 			} );
 
 			it( 'should enable upon clicking the button', () => {
-				const button = ReactDom.findDOMNode( component ).querySelector( '.domain-management-list__change-primary-button' );
+				const node = ReactDom.findDOMNode( component );
+				const cancelBefore = node.querySelector( '.domain-management-list__cancel-change-primary-button' );
+				assert( ! cancelBefore );
+				const button = node.querySelector( '.domain-management-list__change-primary-button' );
 				TestUtils.Simulate.click( button );
-				assert( component.state.changePrimaryDomainModeEnabled );
+				const cancelAfter = node.querySelector( '.domain-management-list__cancel-change-primary-button' );
+				assert( cancelAfter );
 			} );
 		} );
 
@@ -125,13 +129,18 @@ describe( 'index', function() {
 			} );
 
 			it( 'should show the cancel button', () => {
-				assert( ReactDom.findDOMNode( component.refs.cancelChangePrimaryButton ) );
+				const cancel = ReactDom.findDOMNode( component ).querySelector( '.domain-management-list__cancel-change-primary-button' );
+				assert( cancel );
 			} );
 
 			it( 'should disable upon clicking cancel button', () => {
-				const button = ReactDom.findDOMNode( component.refs.cancelChangePrimaryButton );
+				const node = ReactDom.findDOMNode( component );
+				const cancelBefore = node.querySelector( '.domain-management-list__cancel-change-primary-button' );
+				assert( cancelBefore );
+				const button = node.querySelector( '.domain-management-list__cancel-change-primary-button' );
 				TestUtils.Simulate.click( button );
-				assert( ! component.state.changePrimaryDomainModeEnabled );
+				const cancelAfter = node.querySelector( '.domain-management-list__cancel-change-primary-button' );
+				assert( ! cancelAfter );
 			} );
 
 			it( 'should set the primaryDomainIndex correctly', () => {
