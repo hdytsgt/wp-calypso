@@ -205,6 +205,7 @@ export const List = React.createClass( {
 			return (
 				<Button
 					disabled={ this.state.settingPrimaryDomain }
+					className="domain-management-list__cancel-change-primary-button"
 					ref="cancelChangePrimaryButton"
 					borderless
 					compact
