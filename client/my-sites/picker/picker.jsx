@@ -6,11 +6,16 @@ var React = require( 'react' ),
 	noop = require( 'lodash/noop' ),
 	closeOnEsc = require( 'lib/mixins/close-on-esc' );
 
+import { connect } from 'react-redux';
+
 /**
  * Internal dependencies
  */
 var SiteSelector = require( 'components/site-selector' ),
 	hasTouch = require( 'lib/touch-detect' ).hasTouch;
+
+import { setLayoutFocus, setNextLayoutFocus } from 'state/ui/actions';
+import { getCurrentLayoutFocus } from 'state/ui/selectors';
 
 const SitePicker = React.createClass( {
 	displayName: 'SitePicker',
@@ -19,7 +24,8 @@ const SitePicker = React.createClass( {
 
 	propTypes: {
 		onClose: React.PropTypes.func,
-		layoutFocus: React.PropTypes.object
+		setNextLayoutFocus: React.PropTypes.func.isRequired,
+		setLayoutFocus: React.PropTypes.func.isRequired,
 	},
 
 	getInitialState: function() {
@@ -35,7 +41,7 @@ const SitePicker = React.createClass( {
 	},
 
 	componentWillReceiveProps: function( nextProps ) {
-		if ( ! nextProps.layoutFocus || hasTouch() ) {
+		if ( ! nextProps.currentLayoutFocus || hasTouch() ) {
 			return;
 		}
 
@@ -44,7 +50,7 @@ const SitePicker = React.createClass( {
 		clearTimeout( this._autofocusTimeout );
 		this._autofocusTimeout = setTimeout( function() {
 			this.setState( {
-				isAutoFocused: nextProps.layoutFocus.getCurrent() === 'sites'
+				isAutoFocused: nextProps.currentLayoutFocus === 'sites'
 			} );
 		}.bind( this ), 200 );
 	},
@@ -60,7 +66,7 @@ const SitePicker = React.createClass( {
 		} else {
 			// We use setNext here, because on mobile we want to show sidebar
 			// instead of Stats page after picking a site
-			this.props.layoutFocus.setNext( 'sidebar' );
+			this.props.setNextLayoutFocus( 'sidebar' );
 			this.scrollToTop();
 		}
 		this.props.onClose( event );
@@ -72,8 +78,8 @@ const SitePicker = React.createClass( {
 	},
 
 	closePicker: function() {
-		if ( this.props.layoutFocus && this.props.layoutFocus.getCurrent() === 'sites' ) {
-			this.props.layoutFocus.set( 'sidebar' );
+		if ( this.props.currentLayoutFocus === 'sites' ) {
+			this.props.setLayoutFocus( 'sidebar' );
 			this.scrollToTop();
 		}
 	},
@@ -101,4 +107,8 @@ const SitePicker = React.createClass( {
 	}
 } );
 
-module.exports = wrapWithClickOutside( SitePicker );
+module.exports = wrapWithClickOutside( connect( state => {
+	return {
+		currentLayoutFocus: getCurrentLayoutFocus( state ),
+	};
+}, { setNextLayoutFocus, setLayoutFocus } )( SitePicker ) );

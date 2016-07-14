@@ -2,6 +2,7 @@
  * External dependencies
  */
 import React from 'react';
+import { connect } from 'react-redux';
 
 /**
  * Internal dependencies
@@ -12,12 +13,12 @@ import Stats from './stats';
 import Publish from './publish';
 import Notifications from './notifications';
 import Gravatar from 'components/gravatar';
-import layoutFocus from 'lib/layout-focus';
+import { setNextLayoutFocus } from 'state/ui/actions';
 import config from 'config';
 import { preload } from 'sections-preload';
 import ResumeEditing from 'my-sites/resume-editing';
 
-export default React.createClass( {
+const MasterbarLoggedIn = React.createClass( {
 	displayName: 'Masterbar',
 
 	propTypes: {
@@ -34,11 +35,11 @@ export default React.createClass( {
 	},
 
 	clickMySites() {
-		layoutFocus.setNext( 'sidebar' );
+		this.props.setNextLayoutFocus( 'sidebar' );
 	},
 
 	clickReader() {
-		layoutFocus.setNext( 'content' );
+		this.props.setNextLayoutFocus( 'content' );
 	},
 
 	clickNotifications() {
@@ -125,3 +126,5 @@ export default React.createClass( {
 		);
 	}
 } );
+
+export default connect( null, { setNextLayoutFocus } )( MasterbarLoggedIn );

@@ -3,6 +3,7 @@
  */
 var React = require( 'react' ),
 	debug = require( 'debug' )( 'calypso:me:sidebar' );
+import { connect } from 'react-redux';
 
 /**
  * Internal dependencies
@@ -12,14 +13,15 @@ var Sidebar = require( 'layout/sidebar' ),
 	SidebarItem = require( 'layout/sidebar/item' ),
 	SidebarMenu = require( 'layout/sidebar/menu' ),
 	config = require( 'config' ),
-	layoutFocus = require( 'lib/layout-focus' ),
 	ProfileGravatar = require( 'me/profile-gravatar' ),
 	eventRecorder = require( 'me/event-recorder' ),
 	observe = require( 'lib/mixins/data-observe' ),
 	FormButton = require( 'components/forms/form-button' ),
 	userUtilities = require( 'lib/user/utils' );
 
-module.exports = React.createClass( {
+import { setNextLayoutFocus } from 'state/ui/actions';
+
+const MeSidebar = React.createClass( {
 
 	displayName: 'MeSidebar',
 
@@ -30,7 +32,7 @@ module.exports = React.createClass( {
 	},
 
 	onNavigate: function() {
-		layoutFocus.setNext( 'content' );
+		this.props.setNextLayoutFocus( 'content' );
 		window.scrollTo( 0, 0 );
 	},
 
@@ -179,3 +181,5 @@ module.exports = React.createClass( {
 		}
 	}
 } );
+
+export default connect( null, { setNextLayoutFocus } )( MeSidebar );

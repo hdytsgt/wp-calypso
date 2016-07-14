@@ -14,7 +14,8 @@ import i18n from 'i18n-calypso';
 import sitesList from 'lib/sites-list';
 import PeopleList from './main';
 import EditTeamMember from './edit-team-member-form';
-import layoutFocus from 'lib/layout-focus';
+import { setNextLayoutFocus } from 'state/ui/actions';
+import { getCurrentLayoutFocus } from 'state/ui/selectors';
 import analytics from 'lib/analytics';
 import titlecase from 'to-title-case';
 import UsersStore from 'lib/users/store';
@@ -32,7 +33,8 @@ const sites = sitesList();
 export default {
 	redirectToTeam() {
 		// if we are redirecting we need to retain our intended layout-focus
-		layoutFocus.setNext( layoutFocus.getCurrent() );
+		// FIXME: how do we get dispatch and getState here?
+		//context.store.dispatch( setNextLayoutFocus( getCurrentLayoutFocus( context.store.getState() ) ) );
 		page.redirect( '/people/team' );
 	},
 
@@ -83,7 +85,7 @@ function renderInvitePeople( context ) {
 	}
 
 	if ( isJetpack ) {
-		layoutFocus.setNext( layoutFocus.getCurrent() );
+		context.store.dispatch( setNextLayoutFocus( getCurrentLayoutFocus( context.store.getState() ) ) );
 		page.redirect( '/people/team/' + site.slug );
 		analytics.tracks.recordEvent( 'calypso_invite_people_controller_redirect_to_team' );
 	}
@@ -124,7 +126,7 @@ function renderSingleTeamMember( context ) {
 					log => siteId === log.siteId && 'RECEIVE_USER_FAILED' === log.action && userLogin === log.user
 				);
 				if ( fetchUserError.length ) {
-					layoutFocus.setNext( layoutFocus.getCurrent() );
+					context.store.dispatch( setNextLayoutFocus( getCurrentLayoutFocus( context.store.getState() ) ) );
 					page.redirect( '/people/team/' + site.slug );
 				}
 			} );

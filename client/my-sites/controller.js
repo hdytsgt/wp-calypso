@@ -12,7 +12,7 @@ import i18n from 'i18n-calypso';
  */
 import userFactory from 'lib/user';
 import sitesFactory from 'lib/sites-list';
-import layoutFocus from 'lib/layout-focus';
+import { setLayoutFocus } from 'state/ui/actions';
 import { receiveSite } from 'state/sites/actions';
 
 import {
@@ -45,7 +45,6 @@ function renderNavigation( context, allSitesPath, siteBasePath ) {
 	ReactDom.render(
 		React.createElement( ReduxProvider, { store: context.store },
 			React.createElement( NavigationComponent, {
-				layoutFocus,
 				path: context.path,
 				allSitesPath,
 				siteBasePath,
@@ -288,7 +287,7 @@ module.exports = {
 		 * Sites is rendered on #primary but it doesn't expect a sidebar to exist
 		 */
 		removeSidebar( context );
-		layoutFocus.set( 'content' );
+		context.store.dispatch( setLayoutFocus( 'content' ) );
 
 		// This path sets the URL to be visited once a site is selected
 		const sourcePath = ( basePath === '/sites' ) ? path : basePath;

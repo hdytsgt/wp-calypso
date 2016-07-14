@@ -36,6 +36,7 @@ var MasterbarLoggedIn = require( 'layout/masterbar/logged-in' ),
 	SupportUser;
 
 import { isOffline } from 'state/application/selectors';
+import { getCurrentLayoutFocus } from 'state/ui/selectors';
 import { getGuidedTourState } from 'state/ui/guided-tours/selectors';
 import DesignPreview from 'my-sites/design-preview';
 
@@ -50,7 +51,7 @@ if ( config.isEnabled( 'support-user' ) ) {
 Layout = React.createClass( {
 	displayName: 'Layout',
 
-	mixins: [ SitesListNotices, observe( 'user', 'focus', 'nuxWelcome', 'sites', 'translatorInvitation' ) ],
+	mixins: [ SitesListNotices, observe( 'user', 'nuxWelcome', 'sites', 'translatorInvitation' ) ],
 
 	_sitesPoller: null,
 
@@ -168,7 +169,7 @@ Layout = React.createClass( {
 				'layout',
 				`is-group-${this.props.section.group}`,
 				`is-section-${this.props.section.name}`,
-				`focus-${this.props.focus.getCurrent()}`,
+				`focus-${this.props.currentLayoutFocus}`,
 				{ 'is-support-user': this.props.isSupportUser },
 				{ 'has-no-sidebar': ! this.props.section.secondary }
 			),
@@ -207,6 +208,7 @@ export default connect(
 		const { isLoading, section } = state.ui;
 		return {
 			isLoading,
+			currentLayoutFocus: getCurrentLayoutFocus( state ),
 			isSupportUser: state.support.isSupportUser,
 			section,
 			isOffline: isOffline( state ),
