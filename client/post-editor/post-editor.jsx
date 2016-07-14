@@ -356,13 +356,13 @@ const PostEditor = React.createClass( {
 									<SegmentedControlItem
 										selected={ mode === 'tinymce' }
 										onClick={ this.switchEditorVisualMode }
-										title={ this.translate( 'Edit with a visual editor' ) }>
-										{ this.translate( 'Visual', { context: 'Editor writing mode' } ) }
+										title={ i18n.translate( 'Edit with a visual editor' ) }>
+										{ i18n.translate( 'Visual', { context: 'Editor writing mode' } ) }
 									</SegmentedControlItem>
 									<SegmentedControlItem
 										selected={ mode === 'html' }
 										onClick={ this.switchEditorHtmlMode }
-										title={ this.translate( 'Edit the raw HTML code' ) }>
+										title={ i18n.translate( 'Edit the raw HTML code' ) }>
 										HTML
 									</SegmentedControlItem>
 								</SegmentedControl>
@@ -745,7 +745,7 @@ const PostEditor = React.createClass( {
 
 		switch ( error.message ) {
 			case 'NO_CONTENT':
-				message = this.translate( 'You haven\'t written anything yet!' );
+				message = i18n.translate( 'You haven\'t written anything yet!' );
 				break;
 		}
 
@@ -753,7 +753,7 @@ const PostEditor = React.createClass( {
 	},
 
 	onSaveDraftFailure: function( error ) {
-		var message = this.getFailureMessage( error ) || this.translate( 'Saving of draft failed.' );
+		var message = this.getFailureMessage( error ) || i18n.translate( 'Saving of draft failed.' );
 		this.onSaveFailure( message );
 	},
 
